@@ -1,0 +1,1 @@
+export { ShapeFactory } from './ShapeFactory';
