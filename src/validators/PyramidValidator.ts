@@ -2,9 +2,6 @@ import { NumericValidator } from './NumericValidator';
 import { Point3DValidator } from './Point3DValidator';
 import { COORDINATE_COUNT_PYRAMID } from './ValidationConstants';
 
-/**
- * Validator for Pyramid data
- */
 export class PyramidValidator {
   static validateLine(line: string): { coordinates: number[] } {
     const trimmedLine = line.trim();
@@ -28,7 +25,6 @@ export class PyramidValidator {
       coordinates.push(NumericValidator.parseNumber(parts[i]));
     }
 
-    // Validate 5 points (4 base + 1 apex)
     for (let i = 0; i < 5; i += 1) {
       const x = coordinates[i * 3];
       const y = coordinates[i * 3 + 1];
@@ -49,12 +45,10 @@ export class PyramidValidator {
     x4: number,
     y4: number,
   ): boolean {
-    // Check if 4 points form a rectangle on coordinate plane
-    // For simplicity, check if they form a rectangle parallel to axes
+
     const xs = [x1, x2, x3, x4].sort((a, b) => a - b);
     const ys = [y1, y2, y3, y4].sort((a, b) => a - b);
 
-    // Check if we have exactly 2 unique x and 2 unique y values
     const uniqueXs = new Set(xs);
     const uniqueYs = new Set(ys);
 
@@ -62,7 +56,6 @@ export class PyramidValidator {
   }
 
   static isValidPyramidHeight(baseZ: number, apexZ: number): boolean {
-    // Height should be non-zero
     return Math.abs(baseZ - apexZ) > Number.EPSILON;
   }
 }

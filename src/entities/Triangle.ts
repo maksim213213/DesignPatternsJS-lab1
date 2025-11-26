@@ -1,9 +1,6 @@
 import { Point } from './Point';
 import { IShape } from './IShape';
 
-/**
- * Entity class for Triangle (no business logic)
- */
 export class Triangle implements IShape {
   readonly id: string;
   readonly name: string = 'Triangle';

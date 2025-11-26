@@ -2,9 +2,6 @@ import { NumericValidator } from './NumericValidator';
 import { PointValidator } from './PointValidator';
 import { COORDINATE_COUNT_TRIANGLE } from './ValidationConstants';
 
-/**
- * Validator for Triangle data
- */
 export class TriangleValidator {
   static validateLine(line: string): { coordinates: number[] } {
     const trimmedLine = line.trim();
@@ -46,7 +43,7 @@ export class TriangleValidator {
     x3: number,
     y3: number,
   ): boolean {
-    // Check if points form a triangle (not collinear)
+    // проверка на коллинеарность
     const area = Math.abs((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1)) / 2;
     return area > Number.EPSILON;
   }

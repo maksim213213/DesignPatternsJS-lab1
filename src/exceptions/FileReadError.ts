@@ -1,6 +1,3 @@
-/**
- * Custom exception for file reading operations
- */
 export class FileReadError extends Error {
   constructor(message: string) {
     super(message);

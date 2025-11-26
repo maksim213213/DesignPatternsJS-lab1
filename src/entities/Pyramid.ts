@@ -1,9 +1,7 @@
 import { Point3D } from './Point3D';
 import { IShape } from './IShape';
 
-/**
- * Entity class for Pyramid with rectangular base (no business logic)
- */
+
 export class Pyramid implements IShape {
   readonly id: string;
   readonly name: string = 'Pyramid';

@@ -6,12 +6,10 @@ async function main(): Promise<void> {
   try {
     logger.info('Application started');
 
-    // Read shapes from file
     const result = ShapeFileReaderService.readTrianglesFromFile('./data/shapes.txt');
 
     logger.info(`Loaded ${result.triangles.length} triangles and ${result.pyramids.length} pyramids`);
 
-    // Process triangles
     result.triangles.forEach((triangle) => {
       const area = TriangleCalculationService.calculateArea(triangle);
       const perimeter = TriangleCalculationService.calculatePerimeter(triangle);
@@ -28,7 +26,6 @@ async function main(): Promise<void> {
       logger.info(`  Type: ${typeInfo}`);
     });
 
-    // Process pyramids
     result.pyramids.forEach((pyramid) => {
       const volume = PyramidCalculationService.calculateVolume(pyramid);
       const surfaceArea = PyramidCalculationService.calculateSurfaceArea(pyramid);
@@ -42,7 +39,6 @@ async function main(): Promise<void> {
       logger.info(`  Volume ratio: ${ratioXY.toFixed(4)}`);
     });
 
-    // Log errors
     if (result.errors.length > 0) {
       logger.warn(`Found ${result.errors.length} invalid lines:`);
       result.errors.forEach((err) => {

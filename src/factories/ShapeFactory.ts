@@ -3,9 +3,6 @@ import { TriangleValidator, PyramidValidator } from '../validators';
 import { InvalidShapeDataError } from '../exceptions';
 import logger from '../utils/logger';
 
-/**
- * Factory for creating shapes
- */
 export class ShapeFactory {
   static createTriangle(id: string, line: string): Triangle {
     try {

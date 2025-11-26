@@ -1,6 +1,3 @@
-/**
- * Represents a point in 3D space
- */
 export class Point3D {
   readonly x: number;
   readonly y: number;

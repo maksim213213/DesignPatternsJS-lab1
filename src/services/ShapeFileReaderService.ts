@@ -11,13 +11,7 @@ interface ParseResult {
   errors: Array<{ lineNumber: number; content: string; error: string }>;
 }
 
-/**
- * Service for reading and parsing shape data from files
- */
 export class ShapeFileReaderService {
-  /**
-   * Read triangles from file
-   */
   static readTrianglesFromFile(filePath: string): ParseResult {
     const triangles: Triangle[] = [];
     const pyramids: Pyramid[] = [];
@@ -38,7 +32,7 @@ export class ShapeFileReaderService {
         const trimmedLine = line.trim();
 
         if (!trimmedLine || trimmedLine.startsWith('#')) {
-          return; // Skip empty lines and comments
+          return; // пропускает пустые строки и комментарии
         }
 
         try {
