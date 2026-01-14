@@ -1,0 +1,1 @@
+export { ShapeRepository } from './ShapeRepository';

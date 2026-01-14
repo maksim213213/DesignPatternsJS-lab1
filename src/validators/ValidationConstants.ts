@@ -1,6 +1,3 @@
-/**
- * Constants for validation
- */
 export const COORDINATE_COUNT_TRIANGLE = 6;
 export const COORDINATE_COUNT_PYRAMID = 15;
 export const MIN_COORDINATE_VALUE = -Number.MAX_VALUE;

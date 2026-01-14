@@ -1,6 +1,3 @@
-/**
- * Validator for Point coordinates
- */
 export class PointValidator {
   static isValidCoordinates(x: number, y: number): boolean {
     return Number.isFinite(x) && Number.isFinite(y);

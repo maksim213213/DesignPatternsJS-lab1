@@ -1,43 +1,58 @@
-import { ShapeFileReaderService } from './services';
+import { ShapeFileReaderService, Warehouse } from './services';
 import { TriangleCalculationService, PyramidCalculationService } from './services';
+import { ShapeRepository } from './repositories';
+import {
+  ShapeByNameSpecification,
+  ShapeInFirstQuadrantSpecification,
+  ShapeAreaInRangeSpecification,
+  ShapeDistanceFromOriginInRangeSpecification
+} from './specifications';
+import { ShapeIdComparator, ShapeNameComparator } from './utils';
+import { demonstrateProxyAndCommand } from './FileAccessDemo';
 import logger from './utils/logger';
 
 async function main(): Promise<void> {
   try {
     logger.info('Application started');
 
+    const repository = new ShapeRepository();
+    const warehouse = Warehouse.getInstance();
+    repository.attach(warehouse);
+
     const result = ShapeFileReaderService.readTrianglesFromFile('./data/shapes.txt');
 
     logger.info(`Loaded ${result.triangles.length} triangles and ${result.pyramids.length} pyramids`);
 
-    result.triangles.forEach((triangle) => {
-      const area = TriangleCalculationService.calculateArea(triangle);
-      const perimeter = TriangleCalculationService.calculatePerimeter(triangle);
-      const isRight = TriangleCalculationService.isRightAngled(triangle);
-      const isIsosceles = TriangleCalculationService.isIsosceles(triangle);
-      const isEquilateral = TriangleCalculationService.isEquilateral(triangle);
-      const isAcute = TriangleCalculationService.isAcute(triangle);
-      const isObtuse = TriangleCalculationService.isObtuse(triangle);
+    // Add shapes to repository
+    result.triangles.forEach(triangle => repository.add(triangle));
+    result.pyramids.forEach(pyramid => repository.add(pyramid));
 
-      logger.info(`Triangle ${triangle.id}:`);
-      logger.info(`  Area: ${area.toFixed(2)}`);
-      logger.info(`  Perimeter: ${perimeter.toFixed(2)}`);
-      const typeInfo = `Right=${isRight}, Iso=${isIsosceles}, Eq=${isEquilateral}, Ac=${isAcute}, Obt=${isObtuse}`;
-      logger.info(`  Type: ${typeInfo}`);
-    });
+    // Demonstrate searching
+    const triangles = repository.findBySpecification(new ShapeByNameSpecification('Triangle'));
+    logger.info(`Found ${triangles.length} triangles`);
 
-    result.pyramids.forEach((pyramid) => {
-      const volume = PyramidCalculationService.calculateVolume(pyramid);
-      const surfaceArea = PyramidCalculationService.calculateSurfaceArea(pyramid);
-      const baseOnPlane = PyramidCalculationService.isBaseOnCoordinatePlane(pyramid);
-      const ratioXY = PyramidCalculationService.calculateVolumeRatioAfterCut(pyramid, 'XY', pyramid.point1.z + 1);
+    const firstQuadrantShapes = repository.findBySpecification(new ShapeInFirstQuadrantSpecification());
+    logger.info(`Found ${firstQuadrantShapes.length} shapes in first quadrant`);
 
-      logger.info(`Pyramid ${pyramid.id}:`);
-      logger.info(`  Volume: ${volume.toFixed(2)}`);
-      logger.info(`  Surface Area: ${surfaceArea.toFixed(2)}`);
-      logger.info(`  Base on plane: ${baseOnPlane}`);
-      logger.info(`  Volume ratio: ${ratioXY.toFixed(4)}`);
-    });
+    const areaRangeShapes = repository.findBySpecification(new ShapeAreaInRangeSpecification(1, 10));
+    logger.info(`Found ${areaRangeShapes.length} shapes with area between 1 and 10`);
+
+    const distanceRangeShapes = repository.findBySpecification(new ShapeDistanceFromOriginInRangeSpecification(0, 5));
+    logger.info(`Found ${distanceRangeShapes.length} shapes within distance 0-5 from origin`);
+
+    // Demonstrate sorting
+    const sortedById = repository.sort(new ShapeIdComparator());
+    logger.info(`Sorted shapes by ID: ${sortedById.map(s => s.id).join(', ')}`);
+
+    const sortedByName = repository.sort(new ShapeNameComparator());
+    logger.info(`Sorted shapes by name: ${sortedByName.map(s => s.name).join(', ')}`);
+
+    // Display warehouse metrics
+    const allMetrics = warehouse.getAllMetrics();
+    logger.info(`Warehouse has metrics for ${allMetrics.length} shapes`);
+
+    // Demonstrate Proxy and Command patterns
+    demonstrateProxyAndCommand();
 
     if (result.errors.length > 0) {
       logger.warn(`Found ${result.errors.length} invalid lines:`);

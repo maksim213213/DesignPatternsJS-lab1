@@ -1,6 +1,3 @@
-/**
- * Custom exception for invalid point coordinates
- */
 export class InvalidPointError extends Error {
   constructor(message: string) {
     super(message);
